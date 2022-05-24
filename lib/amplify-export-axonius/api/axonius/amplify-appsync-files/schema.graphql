@@ -1,0 +1,280 @@
+
+type Device {
+  id: ID!
+  hostName: String!
+  lastSeen: String
+  macAddress: String
+  adapterConnections(filter: ModelResourceFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelResourceConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Resource {
+  id: ID!
+  name: String!
+  type: Adapter
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  deviceAdapterConnectionsId: ID
+  resourceTypeId: ID
+}
+
+type Adapter {
+  id: ID!
+  name: String!
+  description: String!
+  imageUrl: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelDeviceConnection {
+  items: [Device]!
+  nextToken: String
+}
+
+input ModelDeviceFilterInput {
+  id: ModelIDInput
+  hostName: ModelStringInput
+  lastSeen: ModelStringInput
+  macAddress: ModelStringInput
+  and: [ModelDeviceFilterInput]
+  or: [ModelDeviceFilterInput]
+  not: ModelDeviceFilterInput
+}
+
+type Query {
+  getDevice(id: ID!): Device
+  listDevices(filter: ModelDeviceFilterInput, limit: Int, nextToken: String): ModelDeviceConnection
+  getResource(id: ID!): Resource
+  listResources(filter: ModelResourceFilterInput, limit: Int, nextToken: String): ModelResourceConnection
+  getAdapter(id: ID!): Adapter
+  listAdapters(filter: ModelAdapterFilterInput, limit: Int, nextToken: String): ModelAdapterConnection
+}
+
+input ModelDeviceConditionInput {
+  hostName: ModelStringInput
+  lastSeen: ModelStringInput
+  macAddress: ModelStringInput
+  and: [ModelDeviceConditionInput]
+  or: [ModelDeviceConditionInput]
+  not: ModelDeviceConditionInput
+}
+
+input CreateDeviceInput {
+  id: ID
+  hostName: String!
+  lastSeen: String
+  macAddress: String
+}
+
+input UpdateDeviceInput {
+  id: ID!
+  hostName: String
+  lastSeen: String
+  macAddress: String
+}
+
+input DeleteDeviceInput {
+  id: ID!
+}
+
+type Mutation {
+  createDevice(input: CreateDeviceInput!, condition: ModelDeviceConditionInput): Device
+  updateDevice(input: UpdateDeviceInput!, condition: ModelDeviceConditionInput): Device
+  deleteDevice(input: DeleteDeviceInput!, condition: ModelDeviceConditionInput): Device
+  createResource(input: CreateResourceInput!, condition: ModelResourceConditionInput): Resource
+  updateResource(input: UpdateResourceInput!, condition: ModelResourceConditionInput): Resource
+  deleteResource(input: DeleteResourceInput!, condition: ModelResourceConditionInput): Resource
+  createAdapter(input: CreateAdapterInput!, condition: ModelAdapterConditionInput): Adapter
+  updateAdapter(input: UpdateAdapterInput!, condition: ModelAdapterConditionInput): Adapter
+  deleteAdapter(input: DeleteAdapterInput!, condition: ModelAdapterConditionInput): Adapter
+}
+
+type Subscription {
+  onCreateDevice: Device @aws_subscribe(mutations: ["createDevice"])
+  onUpdateDevice: Device @aws_subscribe(mutations: ["updateDevice"])
+  onDeleteDevice: Device @aws_subscribe(mutations: ["deleteDevice"])
+  onCreateResource: Resource @aws_subscribe(mutations: ["createResource"])
+  onUpdateResource: Resource @aws_subscribe(mutations: ["updateResource"])
+  onDeleteResource: Resource @aws_subscribe(mutations: ["deleteResource"])
+  onCreateAdapter: Adapter @aws_subscribe(mutations: ["createAdapter"])
+  onUpdateAdapter: Adapter @aws_subscribe(mutations: ["updateAdapter"])
+  onDeleteAdapter: Adapter @aws_subscribe(mutations: ["deleteAdapter"])
+}
+
+type ModelResourceConnection {
+  items: [Resource]!
+  nextToken: String
+}
+
+input ModelResourceFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  and: [ModelResourceFilterInput]
+  or: [ModelResourceFilterInput]
+  not: ModelResourceFilterInput
+  deviceAdapterConnectionsId: ModelIDInput
+  resourceTypeId: ModelIDInput
+}
+
+input ModelResourceConditionInput {
+  name: ModelStringInput
+  and: [ModelResourceConditionInput]
+  or: [ModelResourceConditionInput]
+  not: ModelResourceConditionInput
+  deviceAdapterConnectionsId: ModelIDInput
+  resourceTypeId: ModelIDInput
+}
+
+input CreateResourceInput {
+  id: ID
+  name: String!
+  deviceAdapterConnectionsId: ID
+  resourceTypeId: ID
+}
+
+input UpdateResourceInput {
+  id: ID!
+  name: String
+  deviceAdapterConnectionsId: ID
+  resourceTypeId: ID
+}
+
+input DeleteResourceInput {
+  id: ID!
+}
+
+type ModelAdapterConnection {
+  items: [Adapter]!
+  nextToken: String
+}
+
+input ModelAdapterFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  description: ModelStringInput
+  imageUrl: ModelStringInput
+  and: [ModelAdapterFilterInput]
+  or: [ModelAdapterFilterInput]
+  not: ModelAdapterFilterInput
+}
+
+input ModelAdapterConditionInput {
+  name: ModelStringInput
+  description: ModelStringInput
+  imageUrl: ModelStringInput
+  and: [ModelAdapterConditionInput]
+  or: [ModelAdapterConditionInput]
+  not: ModelAdapterConditionInput
+}
+
+input CreateAdapterInput {
+  id: ID
+  name: String!
+  description: String!
+  imageUrl: String
+}
+
+input UpdateAdapterInput {
+  id: ID!
+  name: String
+  description: String
+  imageUrl: String
+}
+
+input DeleteAdapterInput {
+  id: ID!
+}
+

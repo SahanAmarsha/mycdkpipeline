@@ -1,0 +1,53 @@
+{
+  "stackName": "amplify-axonius-dev-14258",
+  "props": {
+    "templateFile": "root-stack-template.json",
+    "parameters": {
+      "AuthRoleName": "amplify-axonius-dev-14258-authRole",
+      "UnauthRoleName": "amplify-axonius-dev-14258-unauthRole",
+      "DeploymentBucketName": "amplify-axonius-dev-14258-deployment"
+    },
+    "preserveLogicalIds": true,
+    "loadNestedStacks": {
+      "apiaxonius": {
+        "templateFile": "api\\axonius\\cloudformation-template.json",
+        "parameters": {
+          "AppSyncApiName": "axonius",
+          "DynamoDBBillingMode": "PAY_PER_REQUEST",
+          "DynamoDBEnableServerSideEncryption": false,
+          "S3DeploymentBucket": "amplify-axonius-dev-14258-deployment",
+          "S3DeploymentRootKey": "amplify-appsync-files/e63bb2a43ca001762ec435a5a0850f05c1a88b9d",
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {
+          "Adapter": {
+            "templateFile": "api\\axonius\\amplify-appsync-files\\stacks\\Adapter.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          },
+          "ConnectionStack": {
+            "templateFile": "api\\axonius\\amplify-appsync-files\\stacks\\ConnectionStack.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          },
+          "CustomResourcesjson": {
+            "templateFile": "api\\axonius\\amplify-appsync-files\\stacks\\CustomResources.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          },
+          "Device": {
+            "templateFile": "api\\axonius\\amplify-appsync-files\\stacks\\Device.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          },
+          "Resource": {
+            "templateFile": "api\\axonius\\amplify-appsync-files\\stacks\\Resource.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          }
+        }
+      }
+    }
+  }
+}
